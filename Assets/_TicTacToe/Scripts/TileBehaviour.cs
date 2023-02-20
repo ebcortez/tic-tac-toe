@@ -11,8 +11,11 @@ namespace TicTacToe.Gameplay {
 
 		public TileState TileState => tileState;
 
-		public void SetGridPosition(Vector2Int gridPosition) {
-			this.gridPosition = gridPosition;
+		public void SetGridPosition(Vector2Int gridPosition) => this.gridPosition = gridPosition;
+
+		public void ResetTile() {
+			tileSprite.sprite = null;
+			tileState = TileState.Empty;
 		}
 
 		public void OccupyTile(Player occupant) {

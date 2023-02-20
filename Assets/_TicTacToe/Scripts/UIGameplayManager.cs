@@ -12,6 +12,7 @@ namespace TicTacToe.Gameplay.UI {
 		}
 
 		[SerializeField] private PlayerDetails player1Details, player2Details;
+		[SerializeField] private GameObject nextRoundButton;
 
 		public void SetPlayer1Name(string name) => player1Details.playerName.text = name;
 		public void SetPlayer2Name(string name) => player2Details.playerName.text = name;
@@ -20,6 +21,10 @@ namespace TicTacToe.Gameplay.UI {
 		public void SetPlayer2Score(int score) => player2Details.playerScore.text = $"Score: {score}";
 
 		public void RestartGame() => GameManager.Instance.RestartGame();
+		public void NextRound() {
+			GameManager.Instance.NextRound();
+			nextRoundButton.SetActive(false);
+		}
 
 		private void SetPlayersScore(Player player) {
 			if(player.AssignedTileState == TileState.X) SetPlayer1Score(player.GetScore());
@@ -28,6 +33,9 @@ namespace TicTacToe.Gameplay.UI {
 
 		private void Awake() {
 			GameManager.Instance.OnPlayerScore.AddListener(SetPlayersScore);
+			GameManager.Instance.OnGameEnd.AddListener(winner => nextRoundButton.SetActive(true));
+
+			nextRoundButton.SetActive(false);
 		}
 	}
 }

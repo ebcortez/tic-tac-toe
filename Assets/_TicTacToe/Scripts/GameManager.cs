@@ -12,6 +12,7 @@ namespace TicTacToe.Gameplay {
 		[SerializeField] private Sprite xTexture, oTexture;
 		[HideInInspector] public UnityEvent<Vector2Int> OnTileOccupied;
 		[HideInInspector] public UnityEvent<Player> OnPlayerScore;
+		[HideInInspector] public UnityEvent<Player> OnGameEnd;
 
 		public TileBehaviour[,] Grid { get; set; }
 
@@ -35,14 +36,14 @@ namespace TicTacToe.Gameplay {
 			SetPlayer2();
 			CurrentPlayer = player1;
 
-			OnTileOccupied.AddListener((tileGridPosition) => {
+			OnTileOccupied.AddListener(tileGridPosition => {
 				CheckForWinner(tileGridPosition);
 				if(!HasWinner) EndTurn();
 			});
 		}
 
 		private void SetPlayer1() {
-			player1 = new Player("Player 1", xTexture, TileState.X);
+			player1 = PlayerManager.Instance.Player == null ? new Player("Player 1", xTexture, TileState.X) : PlayerManager.Instance.Player;
 		}
 
 		private void SetPlayer2() {
@@ -61,6 +62,7 @@ namespace TicTacToe.Gameplay {
 				if(column == gridSize || row == gridSize || diagonal == gridSize || reverseDiagonal == gridSize) {
 					HasWinner = true;
 					CurrentPlayer.AddScore(1);
+					OnGameEnd?.Invoke(CurrentPlayer);
 					Debug.Log($"Player {CurrentPlayer.AssignedTileState} is the winner.");
 				}
 			}
@@ -72,5 +74,13 @@ namespace TicTacToe.Gameplay {
 
 		private void EndTurn() => CurrentPlayer = CurrentPlayer == player1 ? player2 : player1;
 		public void RestartGame() => SceneManager.LoadScene("GameplayScene");
+		public void NextRound() {
+			HasWinner = false;
+			TotalMoves = 0;
+
+			foreach(TileBehaviour tile in Grid) {
+				tile.ResetTile();
+			}
+		}
 	}
 }

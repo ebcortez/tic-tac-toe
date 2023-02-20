@@ -22,16 +22,14 @@ namespace TicTacToe {
 			isTurn = false;
 			this.assignedSprite = assignedSprite;
 			this.assignedTileState = assignedTileState;
-			AddScore(PlayerPrefs.GetInt(playerName, score));
+			AddScore(0);
 		}
 
 		public void AddScore(int scoreToAdd) {
 			score += scoreToAdd;
-			SaveScore();
 			GameManager.Instance.OnPlayerScore?.Invoke(this);
 		}
 
 		public int GetScore() => score;
-		private void SaveScore() =>	PlayerPrefs.SetInt(playerName, score);
 	} 
 }
