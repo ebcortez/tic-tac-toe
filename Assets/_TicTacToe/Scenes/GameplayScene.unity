@@ -272,6 +272,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xTexture: {fileID: 21300000, guid: 9b6c589567eac574aad57e44493c5777, type: 3}
   oTexture: {fileID: 21300000, guid: f381981e636129044ad61b44e16e9e3d, type: 3}
+  OnTileOccupied:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1186899548
 Transform:
   m_ObjectHideFlags: 0
@@ -471,6 +474,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileSprite: {fileID: 1398194162}
+  tileState: 0
 --- !u!61 &1529147915
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -527,6 +531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseTile: {fileID: 1529147914}
+  startPosition: {x: -1, y: 1}
 --- !u!4 &1744883815
 Transform:
   m_ObjectHideFlags: 0

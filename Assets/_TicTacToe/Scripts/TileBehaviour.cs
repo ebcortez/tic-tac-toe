@@ -7,23 +7,24 @@ namespace TicTacToe.Gameplay {
 		[SerializeField] private SpriteRenderer tileSprite;
 		[SerializeField] private TileState tileState;
 
-		public Vector3 Position { get; private set; }
+		private Vector2Int gridPosition;
+
 		public TileState TileState => tileState;
+
+		public void SetGridPosition(Vector2Int gridPosition) {
+			this.gridPosition = gridPosition;
+		}
 
 		public void OccupyTile(Player occupant) {
 			tileSprite.sprite = occupant.AssignedSprite;
 			tileState = occupant.AssignedTileState;
-			GameManager.Instance.OnTileOccupied?.Invoke();
+			GameManager.Instance.OnTileOccupied?.Invoke(gridPosition);
 		}
 
 		public bool IsOccupied => tileState != TileState.Empty;
 
-		private void Awake() {
-			Position = transform.position;
-		}
-
 		private void OnMouseDown() {
-			if(IsOccupied) return;
+			if(IsOccupied || GameManager.Instance.HasWinner) return;
 
 			OccupyTile(GameManager.Instance.CurrentPlayer);
 		}
