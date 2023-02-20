@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PlayFab;
 
 namespace TicTacToe {
 	public class PlayerManager : MonoBehaviour {
@@ -15,7 +16,9 @@ namespace TicTacToe {
 			}
 		}
 
-		public Player Player { get; private set; }
+		private const string TITLE_ID = "87890";
+
+		public Player Player { get; set; }
 
 		private void Awake() {
 			if(instance == null) {
@@ -23,6 +26,10 @@ namespace TicTacToe {
 				DontDestroyOnLoad(gameObject);
 			} else {
 				Destroy(this);
+			}
+
+			if(string.IsNullOrEmpty(PlayFabSettings.staticSettings.TitleId)) {
+				PlayFabSettings.staticSettings.TitleId = TITLE_ID;
 			}
 		}
 	}

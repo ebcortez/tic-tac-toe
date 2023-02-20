@@ -37,5 +37,10 @@ namespace TicTacToe.Gameplay.UI {
 
 			nextRoundButton.SetActive(false);
 		}
+
+		private void Start() {
+			SetPlayer1Name(GameManager.Instance.Player1.PlayerName);
+			SetPlayer2Name(GameManager.Instance.Player2.PlayerName);
+		}
 	}
 }

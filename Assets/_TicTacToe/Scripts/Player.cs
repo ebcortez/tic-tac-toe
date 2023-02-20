@@ -25,6 +25,10 @@ namespace TicTacToe {
 			AddScore(0);
 		}
 
+		public Player(string playerName) {
+			this.playerName = playerName;
+		}
+
 		public void AddScore(int scoreToAdd) {
 			score += scoreToAdd;
 			GameManager.Instance.OnPlayerScore?.Invoke(this);

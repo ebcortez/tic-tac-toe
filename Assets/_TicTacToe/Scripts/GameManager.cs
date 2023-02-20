@@ -43,7 +43,7 @@ namespace TicTacToe.Gameplay {
 		}
 
 		private void SetPlayer1() {
-			player1 = PlayerManager.Instance.Player == null ? new Player("Player 1", xTexture, TileState.X) : PlayerManager.Instance.Player;
+			player1 = PlayerManager.Instance.Player == null ? new Player("Player 1", xTexture, TileState.X) : new Player(PlayerManager.Instance.Player.PlayerName, xTexture, TileState.X);
 		}
 
 		private void SetPlayer2() {
