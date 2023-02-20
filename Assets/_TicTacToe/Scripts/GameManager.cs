@@ -63,20 +63,43 @@ namespace TicTacToe.Gameplay {
 					HasWinner = true;
 					CurrentPlayer.AddScore(1);
 					OnGameEnd?.Invoke(CurrentPlayer);
-					Debug.Log($"Player {CurrentPlayer.AssignedTileState} is the winner.");
 				}
 			}
 
 			if(!HasWinner && ++TotalMoves >= Grid.Length) {
+				OnGameEnd?.Invoke(null);
 				Debug.Log("DRAW!");
 			}
 		}
 
-		private void EndTurn() => CurrentPlayer = CurrentPlayer == player1 ? player2 : player1;
+		private void EndTurn() {
+			if(CurrentPlayer == player1) {
+				CurrentPlayer = player2;
+				if(!HasWinner && TotalMoves < Grid.Length) {
+					RandomAIMove();
+				}
+			} else {
+				CurrentPlayer = player1;
+			}
+		}
+
+		private void RandomAIMove() {
+			var r = new System.Random();
+			int values = Grid.GetLength(0) * Grid.GetLength(1);
+			int index = r.Next(values);
+
+			var tile = Grid[index / Grid.GetLength(0), index % Grid.GetLength(0)];
+
+			if(tile.IsOccupied) {
+				RandomAIMove();
+			} else tile.OccupyTile(player2);
+		}
+
 		public void RestartGame() => SceneManager.LoadScene("GameplayScene");
 		public void NextRound() {
 			HasWinner = false;
 			TotalMoves = 0;
+			CurrentPlayer = player1;
 
 			foreach(TileBehaviour tile in Grid) {
 				tile.ResetTile();
