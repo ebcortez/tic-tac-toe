@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 namespace TicTacToe.Gameplay.UI {
@@ -21,6 +22,7 @@ namespace TicTacToe.Gameplay.UI {
 		public void SetPlayer2Score(int score) => player2Details.playerScore.text = $"Score: {score}";
 
 		public void RestartGame() => GameManager.Instance.RestartGame();
+		public void BackToMainMenu() => SceneManager.LoadScene("MainMenuScene");
 		public void NextRound() {
 			GameManager.Instance.NextRound();
 			nextRoundButton.SetActive(false);
