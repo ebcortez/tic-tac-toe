@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 
 namespace TicTacToe.Gameplay {
@@ -10,8 +11,9 @@ namespace TicTacToe.Gameplay {
 
 		[SerializeField] private Sprite xTexture, oTexture;
 		[HideInInspector] public UnityEvent<Vector2Int> OnTileOccupied;
+		[HideInInspector] public UnityEvent<Player> OnPlayerScore;
 
-		public TileBehaviour[,] Grid { get; set; } = new TileBehaviour[3, 3];
+		public TileBehaviour[,] Grid { get; set; }
 
 		private Player player1, player2;
 		public Player Player1 => player1;
@@ -24,17 +26,27 @@ namespace TicTacToe.Gameplay {
 		private void Awake() {
 			instance = this;
 
-			player1 = new Player(xTexture, TileState.X);
-			player2 = new Player(oTexture, TileState.O);
-			
-			CurrentPlayer = player1;
+			HasWinner = false;
+			TotalMoves = 0;
 		}
 
 		private void Start() {
+			SetPlayer1();
+			SetPlayer2();
+			CurrentPlayer = player1;
+
 			OnTileOccupied.AddListener((tileGridPosition) => {
 				CheckForWinner(tileGridPosition);
 				if(!HasWinner) EndTurn();
 			});
+		}
+
+		private void SetPlayer1() {
+			player1 = new Player("Player 1", xTexture, TileState.X);
+		}
+
+		private void SetPlayer2() {
+			player2 = new Player("Player 2", oTexture, TileState.O);
 		}
 
 		private void CheckForWinner(Vector2Int tileGridPosition) {
@@ -48,16 +60,17 @@ namespace TicTacToe.Gameplay {
 
 				if(column == gridSize || row == gridSize || diagonal == gridSize || reverseDiagonal == gridSize) {
 					HasWinner = true;
+					CurrentPlayer.AddScore(1);
+					Debug.Log($"Player {CurrentPlayer.AssignedTileState} is the winner.");
 				}
 			}
 
-			if(++TotalMoves >= Grid.Length) {
+			if(!HasWinner && ++TotalMoves >= Grid.Length) {
 				Debug.Log("DRAW!");
 			}
 		}
 
-		private void EndTurn() {
-			CurrentPlayer = CurrentPlayer == player1 ? player2 : player1;
-		}
+		private void EndTurn() => CurrentPlayer = CurrentPlayer == player1 ? player2 : player1;
+		public void RestartGame() => SceneManager.LoadScene("GameplayScene");
 	}
 }
